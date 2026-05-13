@@ -1,0 +1,28 @@
+# Build folders
+build/
+out/
+libs/
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# Compiled files
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.dll
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# User-specific files
+*.user
+*.log
