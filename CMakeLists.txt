@@ -7,11 +7,14 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(Minecraft_clone
 	src/main.cpp
 	libs/glad/src/glad.c
+	src/Shader.cpp
+	src/Shader.h
 )
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include
 	libs/glfw/include
+	libs/glm
 )
 
 target_link_directories(Minecraft_clone PRIVATE
