@@ -15,6 +15,7 @@ target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include
 	libs/glfw/include
 	libs/glm
+	libs/stb
 )
 
 target_link_directories(Minecraft_clone PRIVATE

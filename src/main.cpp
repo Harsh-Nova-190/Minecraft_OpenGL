@@ -7,6 +7,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 #include <cmath>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 using namespace std;
 
 float deltaTime = 0.0f;
@@ -111,6 +113,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+
 	GLFWwindow* window = glfwCreateWindow(1280, 720, "Minecraft Clone", nullptr, nullptr);
 
 	if (window == nullptr)
@@ -123,6 +126,7 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
+
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -139,47 +143,133 @@ int main()
 
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	float vertices[] =
 	{
-		0.5f,  0.5f, 0.0f,   
-		0.5f, -0.5f, 0.0f,   
-		-0.5f, -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f,
+		// positions          // texture coords
+
+		// Front
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		// Back
+		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+
+		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+
+		// Left
+		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+
+		// Right
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		 // Top
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+
+		 // Bottom
+		 -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+
+		  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		  0.5f, -0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	unsigned int indices[] =
-	{
-		0, 1, 3,
-		1, 2, 3
-	};
 
 	unsigned int VBO;
 	unsigned int VAO;
-	unsigned int EBO;
+	unsigned int texture;
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	glGenTextures(1, &texture);
 
 	glBindVertexArray(VAO);
-
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		3 * sizeof(float),
-		(void*)0
-	);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	
+	glEnableVertexAttribArray(1);
+
+	int width;
+	int height;
+	int nrChannels;
+
+	stbi_set_flip_vertically_on_load(true);
+
+	unsigned char* data =
+		stbi_load("textures/Dirt.png",
+			&width,
+			&height,
+			&nrChannels,
+			0);
+
+	if (data)
+	{
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGBA,
+			width,
+			height,
+			0,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			data
+		);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture\n";
+	}
+
+	stbi_image_free(data);
 
 	Shader shader("shaders/triangle.vert", "shaders/triangle.frag");
 
@@ -189,9 +279,13 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		glBindTexture(GL_TEXTURE_2D, texture);
+
 		processInput(window);
 
 		glm::mat4 model = glm::mat4(1.0f);
+		
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
 
@@ -210,10 +304,10 @@ int main()
 
 		shader.setVec4("ourColor", 1.0f, 0.5f, 0.2f, 1.0f);
 
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		shader.setVec4("ourColor", 0.2f, 0.3f, 0.8f, 1.0f);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 
@@ -223,7 +317,6 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 
