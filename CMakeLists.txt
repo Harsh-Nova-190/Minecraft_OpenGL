@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(Minecraft_clone
 	src/main.cpp
 	libs/glad/src/glad.c
-	src/Shader.cpp
-	src/Shader.h
-)
+	"src/graphics/Shader.cpp"
+	"src/graphics/Shader.h"
+ "src/camera/Camera.cpp" "src/camera/Camera.h")
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include
