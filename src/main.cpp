@@ -4,24 +4,17 @@
 #include <filesystem>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "graphics/Shader.h"
 #include "camera/Camera.h"
-#include <cmath>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-using namespace std;
+#include "world/Block.h"
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-
-// mouse settings
-float yaw = -90.0f;
-float pitch = 0.0f;
 float lastX = 640.0f;
 float lastY = 360.0f;
 bool firstMouse = true;
+
+Camera camera;
 
 //cube generation
 const int  terrainWidth = 20;
@@ -32,81 +25,25 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow* window)
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	//float cameraSpeed = 2.5f * deltaTime;
-
-	//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	//{
-	//	cameraPos += cameraSpeed * cameraFront;
-	//}
-
-	//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	//{
-	//	cameraPos -= cameraSpeed * cameraFront;
-	//}
-
-	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	//{
-	//	cameraPos -= normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
-	//}
-
-	//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	//{
-	//	cameraPos += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
-	//}
-
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (firstMouse)
 	{
-		glfwSetWindowShouldClose(window, true);
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
 	}
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+	camera.processMouseMovement(xoffset, yoffset);
 }
-
-//void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-//{
-//	if (firstMouse)
-//	{
-//		lastX = (float)xpos;
-//		lastY = (float)ypos;
-//
-//		firstMouse = false;
-//	}
-//
-//	float xoffset = (float)xpos - lastX;
-//	float yoffset = lastY - (float)ypos;
-//
-//	lastX = (float)xpos;
-//	lastY = (float)ypos;
-//
-//	float sensitivity = 0.1f;
-//
-//	xoffset *= sensitivity;
-//	yoffset *= sensitivity;
-//
-//	yaw += xoffset;
-//	pitch += yoffset;
-//
-//	if (pitch > 89.0f)
-//	{
-//		pitch = 89.0f;
-//	}
-//	if (pitch < -89.0f)
-//	{
-//		pitch = -89.0f;
-//	}
-//
-//	glm::vec3 direction;
-//
-//	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-//	direction.y = sin(glm::radians(pitch));
-//	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-//	cameraFront = glm::normalize(direction);
-//}
 
 int main()
 {
 
-	cout << filesystem::current_path() << endl;
+	std::cout << std::filesystem::current_path() << std::endl;
 
 	glfwInit();
 
@@ -128,6 +65,10 @@ int main()
 
 	glfwMakeContextCurrent(window);
 
+	glfwSetCursorPosCallback(window, mouse_callback);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -138,138 +79,13 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
+	Block block;
+
 	glViewport(0, 0, 1280, 720);
 
-	Camera camera;
-
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-	//glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	float vertices[] =
-	{
-		// positions          // texture coords
-
-		// Front
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		// Back
-		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-
-		// Left
-		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-
-		// Right
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		 // Top
-		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-
-		 // Bottom
-		 -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-
-		  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		  0.5f, -0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-
-	unsigned int VBO;
-	unsigned int VAO;
-	unsigned int texture;
-
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenTextures(1, &texture);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	
-	glEnableVertexAttribArray(1);
-
-	int width;
-	int height;
-	int nrChannels;
-
-	stbi_set_flip_vertically_on_load(true);
-
-	unsigned char* data =
-		stbi_load("textures/Dirt.png",
-			&width,
-			&height,
-			&nrChannels,
-			0);
-
-	if (data)
-	{
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RGBA,
-			width,
-			height,
-			0,
-			GL_RGBA,
-			GL_UNSIGNED_BYTE,
-			data
-		);
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture\n";
-	}
-
-	stbi_image_free(data);
 
 	Shader shader("shaders/triangle.vert", "shaders/triangle.frag");
 
@@ -280,9 +96,26 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		processInput(window);
+		if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			camera.moveForward(deltaTime);
+		}
+		if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			camera.moveBackward(deltaTime);
+		}
+		if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			camera.moveLeft(deltaTime);
+		}
+		if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			camera.moveRight(deltaTime);
+		}
+		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		{
+			glfwSetWindowShouldClose(window, true);
+		}
 		
 		
 		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
@@ -301,25 +134,18 @@ int main()
 		{
 			for (int z = 0; z < terrainDepth; z++)
 			{
-				glm::mat4 model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
-				shader.setMat4("model", model);
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+				block.draw(shader, glm::vec3(
+					(float)x - terrainWidth / 2.0f,
+					0.0f,
+					(float)z - terrainDepth / 2.0f));
 			}
 		}
-
-
-		glBindVertexArray(VAO);
 
 
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
 	}
-
-	glDeleteVertexArrays(1, &VAO);
-
-	glDeleteBuffers(1, &VBO);
 
 	glfwTerminate();
 
