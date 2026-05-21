@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/glm.hpp>
+#include "../engine/Core.h"
 
 class Camera
 {
@@ -17,7 +17,6 @@ class Camera
 		// Mouse Setting
 		float yaw;
 		float pitch;
-
 		float MouseSensitivity;
 
 		void updateCameraVectors();
@@ -31,4 +30,6 @@ class Camera
 		void moveLeft(float deltaTime);
 		void moveRight(float deltaTime);
 		void processMouseMovement(float xoffset, float yoffset);
+		void processKeyboardInput(GLFWwindow* window, float deltaTime);
+		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 };

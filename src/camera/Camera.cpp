@@ -1,7 +1,11 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <cmath>
+#include "../engine/Core.h"
 
+extern Camera camera;
+
+float lastX = 640.0f;
+float lastY = 360.0f;
+bool firstMouse = true;
 
 Camera::Camera()
 {
@@ -71,4 +75,43 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
 		pitch = -89.0f;
 	}
 	updateCameraVectors();
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+	camera.processMouseMovement(xoffset, yoffset);
+}
+
+void Camera::processKeyboardInput(GLFWwindow* window, float deltaTime)
+{
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		moveForward(deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		moveBackward(deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		moveLeft(deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		moveRight(deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
 }

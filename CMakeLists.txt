@@ -13,6 +13,9 @@ add_executable(Minecraft_clone
 	src/camera/Camera.h
 	src/world/Block.h
 	src/world/Block.cpp
+	src/engine/Core.h
+	src/engine/Window.h
+	src/engine/Window.cpp
 )
 
 target_include_directories(Minecraft_clone PRIVATE

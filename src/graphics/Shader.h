@@ -1,8 +1,6 @@
 #pragma once
 
-#include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../engine/Core.h"
 
 class Shader
 {

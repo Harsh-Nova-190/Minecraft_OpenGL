@@ -1,35 +1,31 @@
 #include "Shader.h"
-#include <glad/glad.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-using namespace std;
+#include "../engine/Core.h"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
-	ifstream vertexFile(vertexPath);
-	ifstream fragmentFile(fragmentPath);
+	std::ifstream vertexFile(vertexPath);
+	std::ifstream fragmentFile(fragmentPath);
 
 	if (!vertexFile.is_open())
 	{
-		cout << "Failed to open vertex shader file: "
-			<< vertexPath << endl;
+		std::cout << "Failed to open vertex shader file: "
+			<< vertexPath << std::endl;
 	}
 
 	if (!fragmentFile.is_open())
 	{
-		cout << "Failed to open fragment shader file: "
-			<< fragmentPath << endl;
+		std::cout << "Failed to open fragment shader file: "
+			<< fragmentPath << std::endl;
 	}
 
-	stringstream vertexStream;
-	stringstream fragmentStream;
+	std::stringstream vertexStream;
+	std::stringstream fragmentStream;
 
 	vertexStream << vertexFile.rdbuf();
 	fragmentStream << fragmentFile.rdbuf();
 
-	string vertexCode = vertexStream.str();
-	string fragmentCode = fragmentStream.str();
+	std::string vertexCode = vertexStream.str();
+	std::string fragmentCode = fragmentStream.str();
 
 	const char* vertexShaderCode = vertexCode.c_str();
 	const char* fragmentShaderCode = fragmentCode.c_str();
@@ -49,8 +45,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	{
 		glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
 
-		cout << "Vertex Shader Compilation Failed:\n"
-			<< infoLog << endl;
+		std::cout << "Vertex Shader Compilation Failed:\n"
+			<< infoLog << std::endl;
 	}
 
 	unsigned int fragmentShader;
@@ -65,8 +61,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	{
 		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
 
-		cout << "Fragment Shader Compilation Failed:\n"
-			<< infoLog << endl;
+		std::cout << "Fragment Shader Compilation Failed:\n"
+			<< infoLog << std::endl;
 	}
 
 	ID = glCreateProgram();
@@ -82,8 +78,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	{
 		glGetProgramInfoLog(ID, 512, nullptr, infoLog);
 
-		cout << "Shader Program Linking Failed:\n"
-			<< infoLog << endl;
+		std::cout << "Shader Program Linking Failed:\n"
+			<< infoLog << std::endl;
 	}
 
 	glDeleteShader(vertexShader);

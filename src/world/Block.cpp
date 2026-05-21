@@ -1,8 +1,7 @@
 #include "Block.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
+#include "../engine/Core.h"
 
 float vertices[] = {
 	// positions          // texture coords

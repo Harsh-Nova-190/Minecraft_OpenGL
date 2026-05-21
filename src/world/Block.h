@@ -1,6 +1,5 @@
 #pragma once
-#include <glad/glad.h>
-#include <glm/glm.hpp>
+#include "../engine/Core.h"
 #include "../graphics/Shader.h"
 
 class Block
