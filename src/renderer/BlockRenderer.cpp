@@ -1,4 +1,4 @@
-#include "Block.h"
+#include "BlockRenderer.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "../engine/Core.h"
@@ -61,13 +61,12 @@ float vertices[] = {
 		  0.5f, -0.5f, -0.5f,  0.0f, 1.0f
 };
 
-Block::Block()
+BlockRenderer::BlockRenderer()
 {
-    setupMesh();
-    loadTexture();
+    initialize();
 }
 
-void Block::setupMesh()
+void BlockRenderer::initialize()
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -78,9 +77,10 @@ void Block::setupMesh()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	loadTexture();
 }
 
-void Block::loadTexture()
+void BlockRenderer::loadTexture()
 {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -120,12 +120,24 @@ void Block::loadTexture()
 	stbi_image_free(data);
 }
 
-void Block::Block::draw(Shader& shader, glm::vec3 position)
+void BlockRenderer::drawBlock(Shader& shader, glm::vec3 position, FaceFlags faces)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	shader.setMat4("model", model);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	if(faces.front)
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	if(faces.back)
+		glDrawArrays(GL_TRIANGLES, 6, 6);
+	if (faces.left)   
+		glDrawArrays(GL_TRIANGLES, 12, 6);
+	if (faces.right)  
+		glDrawArrays(GL_TRIANGLES, 18, 6);
+	if (faces.top)    
+		glDrawArrays(GL_TRIANGLES, 24, 6);
+	if (faces.bottom) 
+		glDrawArrays(GL_TRIANGLES, 30, 6);
 }

@@ -12,11 +12,13 @@ add_executable(Minecraft_clone
 	src/camera/Camera.cpp 
 	src/camera/Camera.h
 	src/world/Block.h
-	src/world/Block.cpp
+	"src/renderer/BlockRenderer.cpp"
 	src/engine/Core.h
 	src/engine/Window.h
 	src/engine/Window.cpp
-)
+	src/world/World.h
+	src/world/World.cpp
+ "src/renderer/WorldRenderer.h" "src/renderer/WorldRenderer.cpp" "src/renderer/BlockRenderer.h")
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include

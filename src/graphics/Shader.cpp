@@ -111,3 +111,17 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat)
 		glm::value_ptr(mat)
 	);
 }
+
+void Shader::keyBoardInput(GLFWwindow * window)
+{
+		static bool eKeyWasPressed = false;
+		bool eKeyIsPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
+
+		if (eKeyIsPressed && !eKeyWasPressed)  // only triggers on the first frame of press
+		{
+			wireframeMode = !wireframeMode;
+			glPolygonMode(GL_FRONT_AND_BACK, wireframeMode ? GL_LINE : GL_FILL);
+		}
+
+		eKeyWasPressed = eKeyIsPressed;
+}

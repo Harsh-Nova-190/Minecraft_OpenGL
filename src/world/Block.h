@@ -1,20 +1,14 @@
 #pragma once
-#include "../engine/Core.h"
-#include "../graphics/Shader.h"
 
-class Block
+enum class BlockType
 {
-public:
-	unsigned int VAO;
-	unsigned int VBO;
-	unsigned int texture;
+	Air = 0,
+	Grass,
+	Dirt,
+	Stone
+};
 
-	Block();
-	void draw(Shader& shader, glm::vec3 position);
-
-private:
-
-	void setupMesh();
-	void loadTexture();
-
+struct Block
+{
+	BlockType type;
 };

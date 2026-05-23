@@ -14,6 +14,11 @@ Window::Window(int width, int height, const char* title)
 
 bool Window::initialize()
 {
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialize GLFW\n" << std::endl;
+		return false;
+	}
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

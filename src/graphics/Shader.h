@@ -6,6 +6,7 @@ class Shader
 {
 public:
 	unsigned int ID;
+	bool wireframeMode = false;
 
 	Shader(const char* vertexPath, const char* fragmentPath);
 
@@ -19,4 +20,6 @@ public:
 	
 	void setMat4(const std::string& name,
 				const glm::mat4& mat);
+
+	void keyBoardInput(GLFWwindow* window);
 };
