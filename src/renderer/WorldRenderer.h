@@ -9,7 +9,7 @@ class WorldRenderer
 public:
 
 	WorldRenderer(BlockRenderer& blockRenderer);
-
+	
 	void render(World& world, Shader& shader);
 
 private:

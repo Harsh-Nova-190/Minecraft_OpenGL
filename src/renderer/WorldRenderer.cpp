@@ -8,32 +8,41 @@ WorldRenderer::WorldRenderer(BlockRenderer& blockRenderer)
 
 void WorldRenderer::render(World& world, Shader& shader)
 {
-	for(int x = 0; x < World::WIDTH; x++)
+	for (auto& chunk : world.chunkManager.getChunks())
 	{
-		for(int y = 0; y < World::HEIGHT; y++)
+
+		for (int x = 0; x < Chunk::SIZE; x++)
 		{
-			for(int z = 0; z < World::DEPTH; z++)
+			for (int y = 0; y < Chunk::SIZE; y++)
 			{
-				if(!world.isBlockSolid(x, y, z))
+				for (int z = 0; z < Chunk::SIZE; z++)
 				{
-					continue;
+					if (!chunk.isBlockSolid(x, y, z))
+					{
+						continue;
+					}
+
+					FaceFlags faces;
+					faces.top = !chunk.isBlockSolid(x, y + 1, z);
+					faces.bottom = !chunk.isBlockSolid(x, y - 1, z);
+					faces.left = !chunk.isBlockSolid(x - 1, y, z);
+					faces.right = !chunk.isBlockSolid(x + 1, y, z);
+					faces.front = !chunk.isBlockSolid(x, y, z + 1);
+					faces.back = !chunk.isBlockSolid(x, y, z - 1);
+
+					if (faces.top || faces.bottom || faces.left ||
+						faces.right || faces.front || faces.back)
+					{
+						BlockType type = chunk.blocks[x][y][z].type;
+						glm::vec3 worldPos = glm::vec3(
+							chunk.chunkPosition.x * Chunk::SIZE + x,
+							chunk.chunkPosition.y * Chunk::SIZE + y,
+							chunk.chunkPosition.z * Chunk::SIZE + z
+						);
+						m_BlockRenderer.drawBlock(shader, worldPos, faces, type);
+					}
 				}
 
-				FaceFlags faces;
-				faces.top = !world.isBlockSolid(x, y + 1, z);
-				faces.bottom = !world.isBlockSolid(x, y - 1, z);
-				faces.left = !world.isBlockSolid(x - 1, y, z);
-				faces.right = !world.isBlockSolid(x + 1, y, z);
-				faces.front = !world.isBlockSolid(x, y, z + 1);
-				faces.back = !world.isBlockSolid(x, y, z - 1);
-
-				if (faces.top || faces.bottom || faces.left ||
-					faces.right || faces.front || faces.back)
-				{
-					m_BlockRenderer.drawBlock(shader,
-						glm::vec3(x - World::WIDTH / 2.0f, y, z - World::DEPTH / 2.0f),
-						faces);
-				}
 			}
 		}
 	}
