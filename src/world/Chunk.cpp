@@ -3,10 +3,10 @@
 Chunk::Chunk(int chunkX, int chunkY, int chunkZ)
 {
 	chunkPosition = glm::ivec3(chunkX, chunkY, chunkZ);
-	generateFlatTerrain();
+	generateTerrain();
 }
 
-void Chunk::generateFlatTerrain()
+void Chunk::generateTerrain()
 {
 	for (int x = 0; x < SIZE; x++)
 	{
@@ -16,13 +16,20 @@ void Chunk::generateFlatTerrain()
 			{
 				if (y == 0)
 				{
+					blocks[x][y][z].type = BlockType::Stone;
+				}
+				else if (y == 1 || y == 2)
+				{
+					blocks[x][y][z].type = BlockType::Dirt;
+				}
+				else if (y == 3)
+				{
 					blocks[x][y][z].type = BlockType::Grass;
 				}
 				else
 				{
 					blocks[x][y][z].type = BlockType::Air;
 				}
-				
 			}
 		}
 	}

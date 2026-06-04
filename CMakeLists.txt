@@ -21,7 +21,13 @@ add_executable(Minecraft_clone
 	src/renderer/WorldRenderer.h
 	src/renderer/WorldRenderer.cpp
 	src/renderer/BlockRenderer.h
- "src/world/Chunk.h" "src/world/Chunk.cpp" "src/world/ChunkManager.h" "src/world/ChunkManager.cpp")
+	src/world/Chunk.h
+	src/world/Chunk.cpp
+	src/world/ChunkManager.h
+	src/world/ChunkManager.cpp
+	src/ui/Crosshair.cpp
+	src/ui/Crosshair.h
+)
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include

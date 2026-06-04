@@ -23,8 +23,9 @@ class Camera
 
 	public:
 		Camera();
-		glm::mat4 getViewMatrix();
-		glm::mat4 getProjectionMatrix(float aspectRatio);
+		glm::vec3 getPosition() const;
+		glm::mat4 getViewMatrix() const;
+		glm::mat4 getProjectionMatrix(float aspectRatio) const;
 		void moveForward(float deltaTime);
 		void moveBackward(float deltaTime);
 		void moveLeft(float deltaTime);

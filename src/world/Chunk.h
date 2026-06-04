@@ -15,7 +15,7 @@ struct ChunkCoord
 class Chunk
 {
 public:
-	static constexpr int SIZE = 1;
+	static constexpr int SIZE = 6;
 
 	Block blocks[SIZE][SIZE][SIZE];
 
@@ -26,5 +26,5 @@ public:
 	bool isBlockSolid(int x, int y, int z);
 
 private:
-	void generateFlatTerrain();
+	void generateTerrain();
 };

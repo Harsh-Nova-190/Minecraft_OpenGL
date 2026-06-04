@@ -10,7 +10,7 @@ bool firstMouse = true;
 Camera::Camera()
 {
 	fov = 60.0f;
-	Position = glm::vec3(0.0f, 0.0f, 3.0f);
+	Position = glm::vec3(0.0f, 1.0f, 3.0f);
 	Front = glm::vec3(0.0f, 0.0f, -1.0f);
 	Up = glm::vec3(0.0f, 1.0f, 0.0f);
 	MovementSpeed = 5.0f;
@@ -19,12 +19,17 @@ Camera::Camera()
 	MouseSensitivity = 0.1f;
 }
 
-glm::mat4 Camera::getViewMatrix()
+glm::vec3 Camera::getPosition() const
+{
+	return Position;
+}
+
+glm::mat4 Camera::getViewMatrix() const
 {
 	return glm::lookAt(Position, Position + Front, Up);
 }
 
-glm::mat4 Camera::getProjectionMatrix(float aspectRatio)
+glm::mat4 Camera::getProjectionMatrix(float aspectRatio) const
 {
 	return glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
 }

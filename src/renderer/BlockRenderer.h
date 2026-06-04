@@ -14,6 +14,8 @@ public:
 	BlockRenderer();
 	void initialize();
 
+	Shader shader;
+
 	void drawBlock(Shader& shader, glm::vec3 position, FaceFlags faces, BlockType type);
 
 private:

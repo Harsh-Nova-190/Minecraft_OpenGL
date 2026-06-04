@@ -24,6 +24,8 @@ int main()
 {
 
 	World world;
+
+	std::cout << world.chunkManager.getChunks().size() << std::endl;
 	
 	// Initialize engine/core
 	Window window(1280, 720, "Minecraft Clone");
@@ -41,9 +43,8 @@ int main()
 	glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	glEnable(GL_DEPTH_TEST);
-
-	Shader shader("shaders/triangle.vert", "shaders/triangle.frag");
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while (!window.shouldClose())
 	{
@@ -53,22 +54,19 @@ int main()
 		
 		// camera movement
 		camera.processKeyboardInput(window.getWindow(), deltaTime);
+
+		world.chunkManager.update(camera.getPosition());
+
+		std::string title = "Minecraft Clone | X: " + std::to_string(camera.getPosition().x) + " Y: " + std::to_string(camera.getPosition().y) + " Z: " + std::to_string(camera.getPosition().z);
+		glfwSetWindowTitle(window.getWindow(), title.c_str());
 		
 		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		glm::mat4 view = camera.getViewMatrix();
-		glm::mat4 projection = camera.getProjectionMatrix(1280.0f / 720.0f);
 
 		glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		shader.keyBoardInput(window.getWindow());
-
-		shader.use();
-		shader.setMat4("view", view);
-		shader.setMat4("projection", projection);
 		
-		renderer.render(world, shader);
+		renderer.render(world, camera);
 
 		window.swapBuffer();
 		window.pollEvents();
