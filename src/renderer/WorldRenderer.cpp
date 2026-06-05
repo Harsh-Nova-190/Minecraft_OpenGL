@@ -1,4 +1,3 @@
-#include "../engine/Core.h"
 #include "WorldRenderer.h"
 
 WorldRenderer::WorldRenderer(BlockRenderer& blockRenderer)
@@ -11,6 +10,7 @@ void WorldRenderer::render(World& world, const Camera& camera)
 	m_Shader.use();
 	m_Shader.setMat4("view", camera.getViewMatrix());
 	m_Shader.setMat4("projection", camera.getProjectionMatrix(1280.0f / 720.0f));
+	m_Shader.keyBoardInput(glfwGetCurrentContext());
 	for (auto& chunk : world.chunkManager.getChunks())
 	{
 		for (int x = 0; x < Chunk::SIZE; x++)

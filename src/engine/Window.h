@@ -9,6 +9,7 @@ class Window
 		GLFWwindow* window;
 		int height;
 		int width;
+		const char* title;
 
 		Window(int width, int height, const char* title);
 

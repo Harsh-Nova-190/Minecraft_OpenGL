@@ -5,14 +5,14 @@ class Crosshair
 {
 public:
 	Crosshair();
-
+	void initialize();
 	void draw();
+	void verticalDraw();
 
 private:
 	unsigned int VAO, VBO, texture;
 
 	Shader shader;
 
-	void setupQuad();
 	unsigned int  loadTexture(const char* path);
 };

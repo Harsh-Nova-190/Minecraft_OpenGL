@@ -9,7 +9,7 @@ Window::Window(int width, int height, const char* title)
 	this->height = height;
 	this->width = width;
 	
-	window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+	this->title = title;
 }
 
 bool Window::initialize()
@@ -19,13 +19,12 @@ bool Window::initialize()
 		std::cout << "Failed to initialize GLFW\n" << std::endl;
 		return false;
 	}
-	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(width, height, "Minecraft Clone", nullptr, nullptr);
+	window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
 	if (!window)
 	{

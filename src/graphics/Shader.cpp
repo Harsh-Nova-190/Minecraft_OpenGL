@@ -117,7 +117,7 @@ void Shader::keyBoardInput(GLFWwindow * window)
 		static bool eKeyWasPressed = false;
 		bool eKeyIsPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
 
-		if (eKeyIsPressed && !eKeyWasPressed)  // only triggers on the first frame of press
+		if (eKeyIsPressed && !eKeyWasPressed)
 		{
 			wireframeMode = !wireframeMode;
 			glPolygonMode(GL_FRONT_AND_BACK, wireframeMode ? GL_LINE : GL_FILL);

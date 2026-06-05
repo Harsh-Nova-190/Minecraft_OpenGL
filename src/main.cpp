@@ -6,6 +6,7 @@
 #include "world/World.h"
 #include "renderer/WorldRenderer.h"
 #include "renderer/BlockRenderer.h"
+#include "ui/Crosshair.h"
 
 Camera camera;
 
@@ -37,6 +38,7 @@ int main()
 
 	BlockRenderer blockRenderer;
 	WorldRenderer renderer(blockRenderer);
+	Crosshair crosshair;
 
 	glfwSetCursorPosCallback(window.getWindow(), mouse_callback);
 
@@ -67,6 +69,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		renderer.render(world, camera);
+		crosshair.draw();
 
 		window.swapBuffer();
 		window.pollEvents();
