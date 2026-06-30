@@ -7,7 +7,7 @@ public:
 	Crosshair();
 	void initialize();
 	void draw();
-	void verticalDraw();
+	//void verticalDraw();
 
 private:
 	unsigned int VAO, VBO, texture;

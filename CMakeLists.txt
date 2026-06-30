@@ -11,8 +11,7 @@ add_executable(Minecraft_clone
 	src/graphics/Shader.h
 	src/camera/Camera.cpp 
 	src/camera/Camera.h
-	src/world/Block.h
-	src/renderer/BlockRenderer.cpp
+	src/world/helper/Block.h
 	src/engine/Core.h
 	src/engine/Window.h
 	src/engine/Window.cpp
@@ -20,14 +19,21 @@ add_executable(Minecraft_clone
 	src/world/World.cpp
 	src/renderer/WorldRenderer.h
 	src/renderer/WorldRenderer.cpp
-	src/renderer/BlockRenderer.h
 	src/world/Chunk.h
 	src/world/Chunk.cpp
 	src/world/ChunkManager.h
 	src/world/ChunkManager.cpp
 	src/ui/Crosshair.cpp
 	src/ui/Crosshair.h
-)
+	src/renderer/ChunkMesh.h
+	src/renderer/ChunkMesh.cpp
+	src/world/CubeData.h
+	src/world/helper/FaceFlags.h
+	src/graphics/TextureAtlas.h
+	src/world/helper/TextureAtlas.h
+	
+	"src/renderer/ChunkMeshBuilder.cpp"
+ "src/renderer/ChunkMeshBuilder.h"  )
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include

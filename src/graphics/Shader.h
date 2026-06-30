@@ -22,4 +22,6 @@ public:
 				const glm::mat4& mat);
 
 	void keyBoardInput(GLFWwindow* window);
+
+	void setInt(const std::string& name, int value);
 };

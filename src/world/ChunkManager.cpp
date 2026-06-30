@@ -12,12 +12,17 @@ std::vector<Chunk>& ChunkManager::getChunks()
 
 void ChunkManager::createInitialChunks()
 {
-    for (int x = -2; x <= 2; x++)
+    for (int x = -4; x <= 4; x++)
     {
-        for (int z = -2; z <= 2; z++)
+        for (int z = -4; z <= 4; z++)
         {
             chunks.emplace_back(x, 0, z);
         }
+    }
+
+    for (auto& chunk : chunks)
+    {
+        meshBuilder.BuildMesh(chunk, *this);
     }
 }
 
@@ -51,18 +56,52 @@ void ChunkManager::update(const glm::vec3& playerPosition)
 		currentChunkZ = playerChunkZ;
 
         loadChunksAroundPlayer();
+		std::cout << "Loaded Chunks: " << chunks.size() << std::endl;
     }
 }
 
 void ChunkManager::loadChunksAroundPlayer()
 {
-	chunks.clear();
 
     for (int x = currentChunkX - RENDER_DISTANCE; x <= currentChunkX + RENDER_DISTANCE; x++)
     {
         for (int z = currentChunkZ - RENDER_DISTANCE; z <= currentChunkZ + RENDER_DISTANCE; z++)
         {
-            chunks.emplace_back(x, 0, z);
+            if (!chunkExists(x, 0, z))
+            {
+                chunks.emplace_back(x, 0, z);
+            }
         }
     }
+
+    unloadDistantChunks();
+
+    for (auto& chunk : chunks)
+    {
+        meshBuilder.BuildMesh(chunk, *this);
+    }
+}
+
+bool ChunkManager::chunkExists(int chunkX, int chunkY, int chunkZ)
+{
+    for (const auto& chunk : chunks)
+    {
+        if (chunk.chunkPosition.x == chunkX && chunk.chunkPosition.y == chunkY && chunk.chunkPosition.z == chunkZ)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ChunkManager::unloadDistantChunks()
+{
+    chunks.erase(std::remove_if(chunks.begin(), chunks.end(), [this](const Chunk& chunk)
+        {
+            return abs(chunk.chunkPosition.x - currentChunkX) > RENDER_DISTANCE ||
+				abs(chunk.chunkPosition.z - currentChunkZ) > RENDER_DISTANCE;
+        }
+    ),
+		chunks.end()
+    );
 }

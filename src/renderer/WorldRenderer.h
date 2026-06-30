@@ -3,17 +3,20 @@
 #include "../world/World.h"
 #include "../graphics/Shader.h"
 #include "../camera/Camera.h"
-#include "BlockRenderer.h"
 
 class WorldRenderer
 {
 public:
 
-	WorldRenderer(BlockRenderer& blockRenderer);
+	WorldRenderer();
 	
 	void render(World& world, const Camera& camera);
 
+	int renderedBlockCount;
+	unsigned int AtlasTexture;
+
 private:
-	BlockRenderer& m_BlockRenderer;
 	Shader m_Shader;
+
+	unsigned int loadTexture(const char* path);
 };

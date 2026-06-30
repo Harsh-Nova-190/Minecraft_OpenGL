@@ -125,3 +125,8 @@ void Shader::keyBoardInput(GLFWwindow * window)
 
 		eKeyWasPressed = eKeyIsPressed;
 }
+
+void Shader::setInt(const std::string& name, int value)
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}

@@ -1,5 +1,6 @@
 #include "Chunk.h"
 
+
 Chunk::Chunk(int chunkX, int chunkY, int chunkZ)
 {
 	chunkPosition = glm::ivec3(chunkX, chunkY, chunkZ);

@@ -32,5 +32,5 @@ class Camera
 		void moveRight(float deltaTime);
 		void processMouseMovement(float xoffset, float yoffset);
 		void processKeyboardInput(GLFWwindow* window, float deltaTime);
-		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+		//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 };
