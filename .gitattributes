@@ -1,0 +1,4 @@
+libs/glad/** linguist-vendored
+libs/glfw/** linguist-vendored
+libs/glm/** linguist-vendored
+libs/stb/** linguist-vendored
