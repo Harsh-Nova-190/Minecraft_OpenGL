@@ -13,23 +13,29 @@ void Chunk::generateTerrain()
 	{
 		for (int z = 0; z < SIZE; z++)
 		{
+			int worldX = chunkPosition.x * SIZE + x;
+			int worldZ = chunkPosition.z * SIZE + z;
+
+			int terrainHeight = Noise::getHeight(worldX, worldZ);
+
 			for (int y = 0; y < SIZE; y++)
 			{
-				if (y == 0)
+				int worldY = chunkPosition.y * SIZE + y;
+				if (worldY > terrainHeight)
 				{
-					blocks[x][y][z].type = BlockType::Stone;
+					blocks[x][y][z].type = BlockType::Air;
 				}
-				else if (y == 1 || y == 2)
-				{
-					blocks[x][y][z].type = BlockType::Dirt;
-				}
-				else if (y == 3)
+				else if (worldY == terrainHeight)
 				{
 					blocks[x][y][z].type = BlockType::Grass;
 				}
+				else if (worldY >= terrainHeight - 2)
+				{
+					blocks[x][y][z].type = BlockType::Dirt;
+				}
 				else
 				{
-					blocks[x][y][z].type = BlockType::Air;
+					blocks[x][y][z].type = BlockType::Stone;
 				}
 			}
 		}

@@ -4,6 +4,7 @@
 #include "../world/helper/FaceFlags.h"
 #include "../renderer/ChunkMesh.h"
 #include "CubeData.h"
+#include "Noise.h"
 
 class ChunkManager;
 
@@ -27,7 +28,7 @@ struct VisibleBlock
 class Chunk
 {
 public:
-	static constexpr int SIZE = 6;
+	static constexpr int SIZE = 16;
 	Block blocks[SIZE][SIZE][SIZE];
 	glm::ivec3 chunkPosition;
 	Chunk(int chunkX, int chunkY, int chunkZ);

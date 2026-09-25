@@ -8,7 +8,6 @@
 #include "ui/Crosshair.h"
 
 Camera camera;
-
 // Terrain generation
 const int  terrainWidth = 20;
 const int  terrainDepth = 20;

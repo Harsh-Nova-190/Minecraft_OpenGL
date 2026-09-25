@@ -7,7 +7,7 @@
 class ChunkManager
 {
 public:
-	static constexpr int RENDER_DISTANCE = 4;
+	static constexpr int RENDER_DISTANCE = 6;
 
 	int currentChunkX = 0;
 	int currentChunkZ = 0;

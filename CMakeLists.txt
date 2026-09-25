@@ -33,7 +33,7 @@ add_executable(Minecraft_clone
 	src/world/helper/TextureAtlas.h
 	
 	"src/renderer/ChunkMeshBuilder.cpp"
- "src/renderer/ChunkMeshBuilder.h"  )
+ "src/renderer/ChunkMeshBuilder.h"   "src/world/Noise.h" "src/world/Noise.cpp")
 
 target_include_directories(Minecraft_clone PRIVATE
 	libs/glad/include
@@ -50,4 +50,14 @@ target_link_directories(Minecraft_clone PRIVATE
 target_link_libraries(Minecraft_clone
 	glfw3
 	opengl32
+)
+
+# Automatically copy shaders and textures to the executable directory after building
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/assets/shaders"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/assets/textures"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/textures"
 )
