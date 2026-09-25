@@ -49,7 +49,7 @@ A high-performance, custom-built 3D voxel rendering engine written in C++ and mo
 ### Build Instructions
 ```bash
 # Clone repository
-git clone [https://github.com/your-username/voxel-engine.git](https://github.com/your-username/voxel-engine.git)
+git clone (https://github.com/Harsh-Nova-190/Minecraft_OpenGL.git)
 cd voxel-engine
 
 # Build project
